@@ -1,9 +1,13 @@
 #!/bin/bash
-docker build -t lmarsden/discovery.data-mesh.io .
+#docker build -t lmarsden/discovery.data-mesh.io .
 HostIP=localhost
+docker rm -f etcd discovery traefik
 docker run -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
- --name etcd quay.io/coreos/etcd \
+ -v /pool/etcd-data:/var/lib/etcd \
+ --name etcd \
+ quay.io/coreos/etcd \
  etcd -name etcd0 \
+ -data-dir /var/lib/etcd \
  -advertise-client-urls http://${HostIP}:2379,http://${HostIP}:4001 \
  -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 \
  -initial-advertise-peer-urls http://${HostIP}:2380 \
@@ -11,6 +15,9 @@ docker run -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
  -initial-cluster-token etcd-cluster-1 \
  -initial-cluster etcd0=http://${HostIP}:2380 \
  -initial-cluster-state new
-docker run -d --link etcd -p 80:8087 -e DISC_ETCD=http://etcd0:2379 \
+docker run -d --link etcd -e DISC_ETCD=http://etcd:2379 \
  --name discovery \
- -e DISC_HOST=http://discovery.data-mesh.io lmarsden/discovery.data-mesh.io
+ -e DISC_HOST=https://discovery.data-mesh.io lmarsden/discovery.data-mesh.io
+docker run --name traefik -d --link discovery -p 8080:8080 -p 80:80 \
+ -v /var/run/docker.sock:/var/run/docker.sock \
+ -v $PWD/traefik.toml:/etc/traefik/traefik.toml traefik
