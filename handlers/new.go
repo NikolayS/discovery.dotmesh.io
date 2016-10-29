@@ -73,6 +73,11 @@ func setupToken(size int) (string, error) {
 		return "", errors.New(fmt.Sprintf("Couldn't setup state %v %v", resp, err))
 	}
 
+	resp, err = kapi.Set(context.Background(), path.Join(key, "_config", "secrets"), "", &client.SetOptions{Dir: true})
+	if err != nil {
+		return "", errors.New(fmt.Sprintf("Couldn't setup state %v %v", resp, err))
+	}
+
 	return token, nil
 }
 

@@ -26,10 +26,17 @@ func Setup(etcdHost, discHost string) {
 		Methods("GET", "PUT")
 	r.HandleFunc("/{token:[a-f0-9]{32}}/", handlers.TokenHandler).
 		Methods("GET", "PUT")
-	r.HandleFunc("/{token:[a-f0-9]{32}}/{machine}", handlers.TokenHandler).
+	// Don't allow '_config' to match machine
+	r.HandleFunc("/{token:[a-f0-9]{32}}/{machine:^[^_]+$}", handlers.TokenHandler).
 		Methods("GET", "PUT", "DELETE")
 	r.HandleFunc("/{token:[a-f0-9]{32}}/_config/size", handlers.TokenHandler).
 		Methods("GET")
+
+	// allow PUT to create unlistable location for secrets keyed on a token
+	// i.e. you can only read the secret if you know its key
+	// TODO open source this and invite audit
+	r.HandleFunc("/{token:[a-f0-9]{32}}/_config/secrets/{secret:[a-f0-9]{32}}", handlers.TokenHandler).
+		Methods("GET", "PUT", "DELETE")
 
 	logH := gorillaHandlers.LoggingHandler(os.Stdout, r)
 

@@ -1,7 +1,7 @@
 #!/bin/bash
-#docker build -t lmarsden/discovery.data-mesh.io .
+docker build -t lmarsden/discovery.data-mesh.io .
 HostIP=localhost
-docker rm -f etcd discovery traefik
+docker rm -f etcd discovery traefik get
 docker run -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
  -v /pool/etcd-data:/var/lib/etcd \
  --name etcd \
@@ -18,6 +18,7 @@ docker run -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
 docker run -d --link etcd -e DISC_ETCD=http://etcd:2379 \
  --name discovery \
  -e DISC_HOST=https://discovery.data-mesh.io lmarsden/discovery.data-mesh.io
-docker run --name traefik -d --link discovery -p 8080:8080 -p 80:80 \
+docker run --name get -v /pool/releases:/usr/share/nginx/html:ro --label traefik.port=80 -d nginx
+docker run --name traefik -d --link discovery --link get -p 8080:8080 -p 80:80 \
  -v /var/run/docker.sock:/var/run/docker.sock \
  -v $PWD/traefik.toml:/etc/traefik/traefik.toml traefik
