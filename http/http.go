@@ -34,8 +34,10 @@ func Setup(etcdHost, discHost string) {
 	// allow PUT to create unlistable location for secrets keyed on a token
 	// i.e. you can only read the secret if you know its key
 	// TODO open source this and invite audit
-	r.HandleFunc("/{token:[a-f0-9]{32}}/_secrets/_{secret:[A-Z0-9]{32}}", handlers.TokenHandler).
-		Methods("GET", "PUT", "DELETE")
+	r.HandleFunc(
+		"/{token:[a-f0-9]{32}}/_secrets/_{secret:[A-Z0-9]{32}}",
+		handlers.TokenHandler,
+	).Methods("GET", "PUT", "DELETE")
 
 	logH := gorillaHandlers.LoggingHandler(os.Stdout, r)
 
