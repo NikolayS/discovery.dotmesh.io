@@ -29,7 +29,7 @@ func Setup(etcdHost, discHost string) {
 	r.HandleFunc("/{token:[a-f0-9]{32}}/{machine}", handlers.TokenHandler).
 		Methods("GET", "PUT", "DELETE")
 	r.HandleFunc("/{token:[a-f0-9]{32}}/_config/size", handlers.TokenHandler).
-		Methods("GET", "PUT")
+		Methods("GET")
 
 	// allow PUT to create unlistable location for secrets keyed on a token
 	// i.e. you can only read the secret if you know its key
