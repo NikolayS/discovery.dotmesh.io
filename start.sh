@@ -19,6 +19,6 @@ docker run --restart=always -d --link etcd -e DISC_ETCD=http://etcd:2379 \
  --name discovery \
  -e DISC_HOST=https://discovery.data-mesh.io lmarsden/discovery.data-mesh.io
 docker run --restart=always --name get -v /pool/releases:/usr/share/nginx/html:ro --label traefik.port=80 -d nginx
-docker run --restart=always --name traefik -d --link discovery --link get -p 8080:8080 -p 80:80 \
+docker run --restart=always --name traefik -d --link discovery --link get -p 8080:8080 -p 80:80 -p 443:443 \
  -v /var/run/docker.sock:/var/run/docker.sock \
- -v $PWD/traefik.toml:/etc/traefik/traefik.toml -v $PWD/acme.json:acme.json traefik
+ -v $PWD/traefik.toml:/etc/traefik/traefik.toml -v $PWD/acme.json:/acme.json traefik
