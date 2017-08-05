@@ -1,5 +1,5 @@
 #!/bin/bash
-docker build -t lmarsden/discovery.data-mesh.io .
+docker build -t lmarsden/discovery.datamesh.io .
 HostIP=localhost
 docker rm -f etcd discovery
 docker run --restart=always -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
@@ -17,4 +17,4 @@ docker run --restart=always -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
  -initial-cluster-state new
 docker run --restart=always -d --link etcd -e DISC_ETCD=http://etcd:2379 \
  --name discovery -p 8087:8087 \
- -e DISC_HOST=http://172.17.0.1:8087 lmarsden/discovery.data-mesh.io
+ -e DISC_HOST=http://172.17.0.1:8087 lmarsden/discovery.datamesh.io
