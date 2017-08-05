@@ -5,7 +5,7 @@ docker rm -f etcd discovery
 docker run --restart=always -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
  -v /pool/etcd-data:/var/lib/etcd \
  --name etcd \
- quay.io/coreos/etcd \
+ quay.io/coreos/etcd:v3.0.15 \
  etcd -name etcd0 \
  -data-dir /var/lib/etcd \
  -advertise-client-urls http://${HostIP}:2379,http://${HostIP}:4001 \
