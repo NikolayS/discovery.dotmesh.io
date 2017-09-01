@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 docker build -t lmarsden/discovery.datamesh.io .
 HostIP=localhost
 docker rm -f etcd discovery
