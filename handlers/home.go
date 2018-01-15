@@ -7,7 +7,7 @@ import (
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r,
-		"https://datamesh.io/",
+		"https://dotmesh.io/",
 		http.StatusMovedPermanently,
 	)
 }

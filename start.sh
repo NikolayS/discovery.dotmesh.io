@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-docker build -t lmarsden/discovery.datamesh.io .
+docker build -t quay.io/dotmesh/discovery.dotmesh.io .
 HostIP=localhost
 docker rm -f etcd discovery traefik get
 docker run --restart=always -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
@@ -17,7 +17,7 @@ docker run --restart=always -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
  -initial-cluster-state new
 docker run --restart=always -d --link etcd -e DISC_ETCD=http://etcd:2379 \
  --name discovery \
- -e DISC_HOST=https://discovery.datamesh.io lmarsden/discovery.datamesh.io
+ -e DISC_HOST=https://discovery.dotmesh.io quay.io/dotmesh/discovery.dotmesh.io
 docker run --restart=always --name get -v /pool/releases:/usr/share/nginx/html:ro --label traefik.port=80 -d nginx
 docker run --restart=always --name traefik -d --link discovery --link get -p 8080:8080 -p 80:80 -p 443:443 \
  -v /var/run/docker.sock:/var/run/docker.sock \

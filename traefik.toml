@@ -330,7 +330,7 @@ endpoint = "unix:///var/run/docker.sock"
 #
 # Required
 #
-domain = "datamesh.io"
+domain = "dotmesh.io"
 
 # Enable watch docker changes
 #
