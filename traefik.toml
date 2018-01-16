@@ -361,7 +361,13 @@ watch = true
 #  key = "/etc/ssl/docker.key"
 #  insecureskipverify = true
 
+[acme.httpChallenge]
 
+  # EntryPoint to use for the challenges.
+  #
+  # Required
+  #
+  entryPoint = "http"
 
 ################################################################
 # Docker Swarmmode configuration backend
