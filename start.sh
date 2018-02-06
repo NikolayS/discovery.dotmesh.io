@@ -5,8 +5,8 @@ docker rm -f etcd discovery traefik get
 docker run --restart=always -d -v /usr/share/ca-certificates/:/etc/ssl/certs \
  -v /pool/etcd-data:/var/lib/etcd \
  --name etcd \
- quay.io/coreos/etcd:v3.2.9 \
- etcd -name etcd0 \
+ quay.io/coreos/etcd:v2.3.8 \
+ -name etcd0 \
  -data-dir /var/lib/etcd \
  -advertise-client-urls http://${HostIP}:2379,http://${HostIP}:4001 \
  -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 \
