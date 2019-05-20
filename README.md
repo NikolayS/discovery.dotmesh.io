@@ -1,4 +1,4 @@
-# discovery.etcd.io
+# discovery.dotmesh.io [![Build Status](https://drone.app.cloud.dotscience.net/api/badges/dotmesh-io/discovery.dotmesh.io/status.svg)](https://drone.app.cloud.dotscience.net/dotmesh-io/discovery.dotmesh.io)
 
 This is a modified fork of https://github.com/coreos/discovery.etcd.io
 
@@ -16,8 +16,8 @@ runtime arguments or environment variables.
 You may run the service in a docker container:
 
 ```
-docker pull quay.io/coreos/discovery.etcd.io
-docker run -d -p 80:8087 -e DISC_ETCD=http://etcd.example.com:2379 -e DISC_HOST=http://discovery.example.com quay.io/coreos/discovery.etcd.io
+docker pull quay.io/dotmesh/discovery
+docker run -d -p 80:8087 -e DISC_ETCD=http://etcd.example.com:2379 -e DISC_HOST=http://discovery.example.com quay.io/dotmesh/discovery
 ```
 
 ## Development
