@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - /pool/releases:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  discovery:
+    build: .
+    environment:
+     - DISC_HOST=https://discovery.dotmesh.io
+     - DISC_ETCD=http://etcd:2379
+    restart: always
+  etcd:
+    restart: always
+    image: quay.io/coreos/etcd:v2.3.8
+    volumes:
+     - /pool/etcd-data:/var/lib/etcd
+     - /usr/share/ca-certificates/:/etc/ssl/certs
+    command: etcd -name etcd0 -data-dir /var/lib/etcd -advertise-client-urls http://localhost:2379,http://localhost:4001 -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 -initial-advertise-peer-urls http://localhost:2380 -listen-peer-urls http://0.0.0.0:2380 -initial-cluster-token etcd-cluster-1 -initial-cluster etcd0=http://localhost:2380 -initial-cluster-state new
